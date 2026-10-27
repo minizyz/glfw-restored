@@ -1,0 +1,45 @@
+plugins {
+    id 'fabric-loom' version '1.17-SNAPSHOT'
+    id 'maven-publish'
+}
+
+version = project.mod_version
+group = project.maven_group
+
+base {
+    archivesName = project.archives_base_name
+}
+
+repositories {
+    mavenCentral()
+    maven { url = "https://maven.fabricmc.net/" }
+}
+
+dependencies {
+    // MC 26.1+ is unobfuscated: no yarn mappings, no remap step.
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    // Re-introduce GLFW — vanilla 26.3 removed it in favour of SDL3.
+    // This is the whole point of the mod: let the runtime window live on GLFW.
+    implementation "org.lwjgl:lwjgl-glfw:${project.lwjgl_version}"
+    implementation "org.lwjgl:lwjgl-glfw:${project.lwjgl_version}:natives-windows"
+    implementation "org.lwjgl:lwjgl-glfw:${project.lwjgl_version}:natives-macos"
+    implementation "org.lwjgl:lwjgl-glfw:${project.lwjgl_version}:natives-linux"
+}
+
+processResources {
+    inputs.property "version", project.version
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = 25
+}
+
+java {
+    withSourcesJar()
+}

@@ -1,0 +1,25 @@
+{
+	"schemaVersion": 1,
+	"id": "glfw-restored",
+	"version": "${version}",
+	"name": "GLFW Restored",
+	"description": "Force the Minecraft 26.3 runtime window back onto GLFW instead of the vanilla SDL3 backend.",
+	"authors": ["doubao"],
+	"contact": {},
+	"license": "MIT",
+	"icon": "assets/glfw-restored/icon.png",
+	"environment": "client",
+	"entrypoints": {
+		"client": [
+			"dev.doubao.glfwrestored.client.GlfwRestoredClient"
+		]
+	},
+	"mixins": [
+		"glfw-restored.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.19.5",
+		"minecraft": "~26.3",
+		"java": ">=25"
+	}
+}
